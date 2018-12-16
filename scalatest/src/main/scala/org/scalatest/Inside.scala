@@ -52,7 +52,7 @@ import org.scalactic._
  * </pre>
  *
  * <p>
- * If an assertion fails, the error message will include the <code>toString</code> of each value passed
+ * If an assertion fails, the error message will include the <code>String.valueOf()</code> of each value passed
  * to <code>inside</code> clauses enclosing the failed assertion. For example, if <code>rec</code> in 
  * the previous expression was defined like this:
  * </p>
@@ -91,7 +91,7 @@ trait Inside {
    * <code>TestFailedException</code> with a detail message describing the problem. Otherwise, if the
    * partial function returns normally, <code>inside</code> will return normally. If the partial function
    * completes abruptly with an exception that mixes in <code>ModifiableMessage</code> (such as
-   * <code>TestFailedException</code>), <code>inside</code> will append the value's <code>toString</code> of
+   * <code>TestFailedException</code>), <code>inside</code> will append the value's <code>String.valueOf()</code> of
    * to the exception's detail message, and rethrow it. If the exception thrown by the partial function does not mix
    * in <code>ModifiableMessage</code>, <code>inside</code> completes abruptly with that same exception.
    * </p>
@@ -111,8 +111,8 @@ trait Inside {
       val levelCount = Inside.level.get
       val indentation = "  " * (levelCount)
       currentMessage match {
-        case Some(msg) => Some(Resources.insidePartialFunctionAppendSomeMsg(msg.trim, indentation, value.toString()))
-        case None => Some(Resources.insidePartialFunctionAppendNone(indentation, value.toString()))
+        case Some(msg) => Some(Resources.insidePartialFunctionAppendSomeMsg(msg.trim, indentation, String.valueOf(value)))
+        case None => Some(Resources.insidePartialFunctionAppendNone(indentation, String.valueOf(value)))
       }
     }
 
@@ -137,7 +137,7 @@ trait Inside {
     }
     else {
       Inside.level.set(Inside.level.get - 1)
-      throw new TestFailedException((_: StackDepthException) => Some(Resources.insidePartialFunctionNotDefined(value.toString())), None, pos)
+      throw new TestFailedException((_: StackDepthException) => Some(Resources.insidePartialFunctionNotDefined(String.valueOf(value))), None, pos)
     }
   }
 }
